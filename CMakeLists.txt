@@ -5,7 +5,11 @@ find_package (Threads)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Werror -Wall")
 
 file(GLOB SOURCES "source/include/*.hpp")
-file(GLOB SOURCES_GTEST "source/src/*.cpp"
+file(GLOB SOURCES_GTEST
+                        "../polarview/source/include/DistanceReading.hpp"
+                        "../polarview/source/include/PolarView.hpp"
+                        "../polarview/source/include/MapPolarView.hpp"
+                        "source/src/*.cpp"
                         "source/include/*.hpp"
                         "test/*.cpp"
                         "test/*.hpp")
