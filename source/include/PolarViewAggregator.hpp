@@ -4,7 +4,7 @@
 #include "../../../polarview/source/include/MapPolarView.hpp"
 // #include "SensorAggregator.hpp"
 
-namespace r2d2{
+namespace R2D2{
     class PolarViewAggregator{
     public:
         PolarViewAggregator();

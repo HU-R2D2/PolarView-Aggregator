@@ -1,6 +1,7 @@
 #include "../include/SensorAggregator.hpp"
-
-// T SensorAggregator::aggregate(){
-//
-// }
-// void SensorAggregator::add_sensor(Sensor<T>)
+namespace R2D2{
+    template<typename T>
+    void SensorAggregator<T>::add_sensor(Sensor<T> sensor){
+        sensors.push_back(sensor);
+    }
+}

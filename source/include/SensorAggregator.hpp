@@ -2,16 +2,17 @@
 #define SENSORAGGREGATOR_H
 
 #include <vector>
-// #include "Sensor.hpp"
+#include "../../../sensorInterfaces/source/include/Sensor.hpp"
 
-namespace r2d2{
+namespace R2D2{
+    template<typename T>
     class SensorAggregator{
     public:
-        // T aggregate();
-        // void add_sensor(Sensor<T>);
+        virtual T aggregate() = 0;
+        void add_sensor(Sensor<T> sensor);
 
     private:
-        // vector<Sensor<T>> sensors;
+        std::vector<Sensor<T>> sensors;
     };
 }
 #endif

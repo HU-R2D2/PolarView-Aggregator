@@ -9,6 +9,7 @@ file(GLOB SOURCES_GTEST
                         "../polarview/source/include/DistanceReading.hpp"
                         "../polarview/source/include/PolarView.hpp"
                         "../polarview/source/include/MapPolarView.hpp"
+                        "../sensorInterfaces/source/include/Sensor.hpp"
                         "source/src/*.cpp"
                         "source/include/*.hpp"
                         "test/*.cpp"
