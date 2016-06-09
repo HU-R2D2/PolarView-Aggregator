@@ -1,6 +1,10 @@
 #ifndef POLARVIEWAGGREGATOR_H
 #define POLARVIEWAGGREGATOR_H
 
+#ifdef debug
+#define debug_PolarViewAggregator
+#endif
+
 #include "../../../polarview/source/include/MapPolarView.hpp"
 // #include "SensorAggregator.hpp"
 #include "Translation.hpp"
@@ -9,15 +13,18 @@
 #include <map>
 #include "Angle.hpp"
 #include <math.h>
+#include <vector>
 
 namespace r2d2{
     class PolarViewAggregator{
     const r2d2::Translation generate_polar_point(const pair<r2d2::Angle, DistanceReading> & polar_view_pair);
-    void safe_add_polarview(std::map<r2d2::Angle, DistanceReading> & woop, const pair<r2d2::Angle, DistanceReading> & bar);
+    void safe_add_polarview(std::map<r2d2::Angle, DistanceReading> & map, pair<r2d2::Angle, DistanceReading> polar_coord);
 
     public:
         PolarViewAggregator();
         PolarView& aggregate();
+
+        std::map<r2d2::Angle, DistanceReading> merge_translated_polarviews(const std::vector<std::map<r2d2::Angle, DistanceReading>> & polarview);
 
 
         std::map<r2d2::Angle, DistanceReading> translate_base_polarview(
