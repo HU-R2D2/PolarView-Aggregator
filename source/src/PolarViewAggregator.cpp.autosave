@@ -6,9 +6,6 @@
 namespace r2d2{
     PolarViewAggregator::PolarViewAggregator(){
     }
-
-    // PolarView& PolarViewAggregator::aggregate(){
-    // }
 	
 		std::map<r2d2::Angle, DistanceReading> PolarViewAggregator::translate_base_polarview(
             const std::map<r2d2::Angle, DistanceReading> & polarview,
@@ -27,12 +24,15 @@ namespace r2d2{
 
                         //prints debug info if debug_PolarViewAggregator is defined at the top of this file
                         #ifdef debug
-                        std::cout << "debug info: x: " << PolarPoint.get_x()/r2d2::Length::CENTIMETER << ", y: " << PolarPoint.get_y()/r2d2::Length::CENTIMETER << std::endl;
+                        std::cout << "debug info: x: " << PolarPoint.get_x()/r2d2::Length::CENTIMETER << 
+                                     ", y: " << PolarPoint.get_y()/r2d2::Length::CENTIMETER << std::endl;
                         #endif
 
 
                         //calculate angle of translated polarpoint
-                        r2d2::Angle translated_angle(atan2(PolarPoint.get_y()/Length::CENTIMETER,PolarPoint.get_x()/Length::CENTIMETER)*Angle::rad);
+                        r2d2::Angle translated_angle(
+                                    atan2(PolarPoint.get_y()/Length::CENTIMETER,
+                                          PolarPoint.get_x()/Length::CENTIMETER)*Angle::rad);
 
                         //calculate distance of translated polarpoint
                         r2d2::DistanceReading translated_distance_reading(

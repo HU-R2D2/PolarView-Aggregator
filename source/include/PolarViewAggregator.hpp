@@ -12,7 +12,8 @@
 
 namespace r2d2{
     class PolarViewAggregator{
-
+    const r2d2::Translation generate_polar_point(const pair<r2d2::Angle, DistanceReading> & polar_view_pair);
+    void safe_add_polarview(std::map<r2d2::Angle, DistanceReading> & woop, const pair<r2d2::Angle, DistanceReading> & bar);
 
     public:
         PolarViewAggregator();
