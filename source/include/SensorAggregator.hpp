@@ -50,7 +50,7 @@
 #define SENSORAGGREGATOR_H
 
 #include <vector>
-#include "../../../sensorInterfaces/source/include/Sensor.hpp"
+#include "Sensor.hpp"
 
 namespace r2d2{
     template<typename T>

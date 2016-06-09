@@ -1,5 +1,5 @@
 #include "../include/PolarViewAggregator.hpp"
-namespace R2D2{
+namespace r2d2{
     PolarViewAggregator::PolarViewAggregator(){
     }
 
