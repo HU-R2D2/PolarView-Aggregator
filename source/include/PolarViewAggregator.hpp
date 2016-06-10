@@ -5,7 +5,7 @@
 #define debug_PolarViewAggregator
 #endif
 
-// #include "SensorAggregator.hpp"
+#include "SensorAggregator.hpp"
 #include "Translation.hpp"
 #include "Length.hpp"
 #include "DistanceReading.hpp"
@@ -19,15 +19,22 @@ namespace r2d2{
 
     private:
 
-        const r2d2::Translation generate_polar_point(const pair<r2d2::Angle, DistanceReading> & polar_view_pair);
+        const r2d2::Translation generate_polar_point(
+            const pair<r2d2::Angle,
+            DistanceReading> & polar_view_pair);
 
-        void safe_add_polarview(std::map<r2d2::Angle, DistanceReading> & map, pair<r2d2::Angle, DistanceReading> polar_coord);
+        void safe_add_polarview(
+            std::map<r2d2::Angle,
+            DistanceReading> & map,
+            pair<r2d2::Angle, DistanceReading> polar_coord);
 
-        std::map<r2d2::Angle, DistanceReading> merge_translated_polarviews(const std::vector<std::map<r2d2::Angle, DistanceReading>> & polarview);
+        std::map<r2d2::Angle, DistanceReading> merge_translated_polarviews(
+            const std::vector<std::map<r2d2::Angle,
+            DistanceReading>> & polarview);
 
         std::map<r2d2::Angle, DistanceReading> translate_base_polarview(
-                                    const std::map<r2d2::Angle, DistanceReading> & polarview,
-                                    const r2d2::Translation & position_of_sensor);
+            const std::map<r2d2::Angle, DistanceReading> & polarview,
+            const r2d2::Translation & position_of_sensor);
 
     public:
         PolarViewAggregator();
