@@ -6,8 +6,17 @@
 namespace r2d2{
     PolarViewAggregator::PolarViewAggregator(){
 
-    }
-	
+        }
+
+    std::map<r2d2::Angle, DistanceReading> PolarViewAggregator::aggregate()
+        {
+           //loop door alle polarView sensoren
+                //vraag van de huidige iterator(sensor) de locatie op
+                //translate de huidige iterator(polarview)
+           //merge alle getranslate polarviews.
+        }
+
+
 		std::map<r2d2::Angle, DistanceReading> PolarViewAggregator::translate_base_polarview(
                                                     const std::map<r2d2::Angle, DistanceReading> & polarview,
                                                     const r2d2::Translation & position_of_sensor){
