@@ -13,9 +13,10 @@
 #include "Angle.hpp"
 #include <math.h>
 #include <vector>
+#include "LocatedDistanceSensor.hpp"
 
 namespace r2d2{
-    class PolarViewAggregator{
+    class PolarViewAggregator: public r2d2::SensorAggregator<LocatedDistanceSensor,PolarViewAggregator>{
 
     private:
 
@@ -28,17 +29,21 @@ namespace r2d2{
             DistanceReading> & map,
             pair<r2d2::Angle, DistanceReading> polar_coord);
 
+        //merge vector of polarviews
         std::map<r2d2::Angle, DistanceReading> merge_translated_polarviews(
             const std::vector<std::map<r2d2::Angle,
             DistanceReading>> & polarview);
 
+        //translated polarview
         std::map<r2d2::Angle, DistanceReading> translate_base_polarview(
             const std::map<r2d2::Angle, DistanceReading> & polarview,
-            const r2d2::Translation & position_of_sensor);
+            const r2d2::Coordinate & position_of_sensor);
 
     public:
+        LocatedDistanceSensor * aggregate();
+
         PolarViewAggregator();
-        std::map<r2d2::Angle, DistanceReading> aggregate();
+
         };
 }
 #endif

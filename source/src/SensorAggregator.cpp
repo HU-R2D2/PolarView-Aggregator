@@ -44,9 +44,9 @@
 //! EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ~< HEADER_VERSION 2016 04 12 >~
 #include "../include/SensorAggregator.hpp"
-namespace r2d2{
-    template<typename T>
-    void SensorAggregator<T>::add_sensor(Sensor<T> sensor){
-        sensors.push_back(sensor);
-    }
-}
+//namespace r2d2{
+//    template<typename T>
+//    void SensorAggregator<T>::add_sensor(Sensor<T> sensor){
+//        sensors.push_back(sensor);
+//    }
+//}

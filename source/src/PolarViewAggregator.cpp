@@ -8,19 +8,11 @@ namespace r2d2{
 
         }
 
-    // std::map<r2d2::Angle, DistanceReading> PolarViewAggregator::aggregate()
-    //     {
-    //     //    loop door alle polarView sensoren
-    //     //         vraag van de huidige iterator(sensor) de locatie op
-    //     //         translate de huidige iterator(polarview)
-    //     //    merge alle getranslate polarviews.
-    //     }
-
-
 		std::map<r2d2::Angle, DistanceReading>
         PolarViewAggregator::translate_base_polarview(
                     const std::map<r2d2::Angle, DistanceReading> & polarview,
-                    const r2d2::Translation & position_of_sensor){
+                    const r2d2::Coordinate & woop){
+                r2d2::Translation position_of_sensor = woop-Coordinate::origin;
 
             std::map<r2d2::Angle, DistanceReading> translated_polarview;
 
@@ -29,7 +21,7 @@ namespace r2d2{
                     if(polar_view_iterator.second.get_result_type() ==
                      r2d2::DistanceReading::ResultType::CHECKED){
 
-                        //calculate translation of translated polarpoint
+                        //calculate Coordinate of translated polarpoint
                         r2d2::Translation PolarPoint =
                         position_of_sensor +
                         generate_polar_point(polar_view_iterator);
@@ -66,8 +58,31 @@ namespace r2d2{
                                                translated_distance_reading));
                     }
                 }
-                return translated_polarview;
+            return translated_polarview;
             }
+
+        LocatedDistanceSensor *PolarViewAggregator::aggregate()
+            {
+                std::vector<std::map<
+                        r2d2::Angle,
+                        DistanceReading>> translated_polarviews;
+
+                for(LocatedDistanceSensor * sensor : sensors){
+                        //fill translated_polarviews
+                        const Coordinate & sensor_location = sensor->get_coordinate_attitude().get_coordinate();
+
+                        std::map<r2d2::Angle, r2d2::DistanceReading> tmp; //TODO: not sure hoe ik deze waarde krijg....
+                        std::map<r2d2::Angle, r2d2::DistanceReading> henk = translate_base_polarview(tmp,sensor_location);
+                        translated_polarviews.push_back(henk);
+
+                    }
+                merge_translated_polarviews(translated_polarviews);
+
+                //TODO: construct LocatedDistanceSensor
+                //TODO: return LocatedDistanceSensor
+                return nullptr;
+            }
+
 
         const r2d2::Translation PolarViewAggregator::generate_polar_point(
                                             const pair<r2d2::Angle,
