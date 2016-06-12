@@ -14,36 +14,38 @@
 #include <math.h>
 #include <vector>
 #include "LocatedDistanceSensor.hpp"
+#include "PolarView.hpp"
+#include <forward_list>
+#include <MapPolarView.hpp>
 
 namespace r2d2{
     class PolarViewAggregator: public r2d2::SensorAggregator<LocatedDistanceSensor,PolarViewAggregator>{
 
     private:
 
-        const r2d2::Translation generate_polar_point(
+        static const r2d2::Translation generate_polar_point(
             const pair<r2d2::Angle,
             DistanceReading> & polar_view_pair);
 
-        void safe_add_polarview(
+        static void safe_add_polarview(
             std::map<r2d2::Angle,
             DistanceReading> & map,
             pair<r2d2::Angle, DistanceReading> polar_coord);
 
         //merge vector of polarviews
-        std::map<r2d2::Angle, DistanceReading> merge_translated_polarviews(
-            const std::vector<std::map<r2d2::Angle,
-            DistanceReading>> & polarview);
+        static MapPolarView merge_translated_polarviews(const std::forward_list<MapPolarView> &polarview_list);
 
         //translated polarview
-        std::map<r2d2::Angle, DistanceReading> translate_base_polarview(
-            const std::map<r2d2::Angle, DistanceReading> & polarview,
-            const r2d2::Coordinate & position_of_sensor);
+        static MapPolarView translate_base_polarview(const std::unique_ptr<r2d2::PolarView> & polarview, const r2d2::Coordinate &position_of_sensor);
 
     public:
+        //this method overwrites the "virtual" aggregate method in SensorAggegator
         LocatedDistanceSensor * aggregate();
+        //PolarView * aggregate_polarviews(std::vector<std::pair<PolarView,Coordinate>> harry);
 
         PolarViewAggregator();
 
+        static MapPolarView aggregate_polarviews(const std::forward_list<std::pair<std::unique_ptr<r2d2::PolarView>, const r2d2::Coordinate &> > &harry);
         };
 }
 #endif
