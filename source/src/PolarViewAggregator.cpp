@@ -8,12 +8,12 @@ namespace r2d2{
 
             LocatedDistanceSensor *PolarViewAggregator::aggregate(){
 
-                    std::forward_list<std::pair<std::unique_ptr<r2d2::PolarView>,const r2d2::Coordinate &>> harry_henk_alles;
+                    std::forward_list<std::pair<const r2d2::MapPolarView&,const r2d2::Coordinate &>> harry_henk_alles;
 
                     for(LocatedDistanceSensor * sensor : sensors){
                             harry_henk_alles.push_front(
                                         std::make_pair(
-                                            sensor->get_data().get_value(),
+                                            *static_cast<r2d2::MapPolarView*>(sensor->get_data().get_value().release()),
                                             sensor->get_coordinate_attitude().get_coordinate()));
                         }
 
@@ -25,7 +25,7 @@ namespace r2d2{
 
             MapPolarView PolarViewAggregator::aggregate_polarviews(
                     const std::forward_list<
-                    std::pair<std::unique_ptr<r2d2::PolarView>,
+                    std::pair<const r2d2::MapPolarView &,
                     const r2d2::Coordinate &>> & harry){
 
 
@@ -47,11 +47,11 @@ namespace r2d2{
                 }
 
 
-        MapPolarView PolarViewAggregator::translate_base_polarview(const std::unique_ptr<r2d2::PolarView> & polarview,
+        MapPolarView PolarViewAggregator::translate_base_polarview(const r2d2::MapPolarView & polarview,
                                                       const r2d2::Coordinate & sdaf){
                 r2d2::Translation position_of_sensor = sdaf-Coordinate::origin;
 
-            std::map<r2d2::Angle, DistanceReading> bobby = polarview->get_distances();
+            std::map<r2d2::Angle, DistanceReading> bobby = polarview.get_distances();
             MapPolarView translated_polarview;
 
             for (const pair<r2d2::Angle,

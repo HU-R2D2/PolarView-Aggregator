@@ -36,7 +36,7 @@ namespace r2d2{
         static MapPolarView merge_translated_polarviews(const std::forward_list<MapPolarView> &polarview_list);
 
         //translated polarview
-        static MapPolarView translate_base_polarview(const std::unique_ptr<r2d2::PolarView> & polarview, const r2d2::Coordinate &position_of_sensor);
+        static MapPolarView translate_base_polarview(const r2d2::MapPolarView & polarview, const r2d2::Coordinate &position_of_sensor);
 
     public:
         //this method overwrites the "virtual" aggregate method in SensorAggegator
@@ -45,7 +45,7 @@ namespace r2d2{
 
         PolarViewAggregator();
 
-        static MapPolarView aggregate_polarviews(const std::forward_list<std::pair<std::unique_ptr<r2d2::PolarView>, const r2d2::Coordinate &> > &harry);
+        static MapPolarView aggregate_polarviews(const std::forward_list<std::pair<const r2d2::MapPolarView &, const r2d2::Coordinate &> > &harry);
         };
 }
 #endif
