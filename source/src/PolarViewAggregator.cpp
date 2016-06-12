@@ -6,7 +6,7 @@
 namespace r2d2{
 
 
-            LocatedDistanceSensor *PolarViewAggregator::aggregate(){
+            LocatedDistanceSensor * PolarViewAggregator::aggregate(){
 
                     std::forward_list<std::pair<const r2d2::MapPolarView&,const r2d2::Coordinate &>> harry_henk_alles;
 

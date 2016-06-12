@@ -19,7 +19,7 @@
 #include <MapPolarView.hpp>
 
 namespace r2d2{
-    class PolarViewAggregator: public r2d2::SensorAggregator<LocatedDistanceSensor,PolarViewAggregator>{
+    class PolarViewAggregator: public r2d2::SensorAggregator<LocatedDistanceSensor>{
 
     private:
 
@@ -40,6 +40,7 @@ namespace r2d2{
 
     public:
         //this method overwrites the "virtual" aggregate method in SensorAggegator
+        //LocatedDistanceSensor * aggregate();
         LocatedDistanceSensor * aggregate();
         //PolarView * aggregate_polarviews(std::vector<std::pair<PolarView,Coordinate>> harry);
 
