@@ -1,4 +1,4 @@
-#include "../include/PolarViewAggregator.hpp"
+#include "PolarViewAggregator.hpp"
 #include <iostream>
 
 
@@ -6,73 +6,54 @@
 namespace r2d2{
 
 
-            LocatedDistanceSensor * PolarViewAggregator::aggregate(){
+            MapPolarView PolarViewAggregator::aggregate(){
 
-                    std::forward_list<std::pair<const r2d2::MapPolarView&,const r2d2::Coordinate &>> harry_henk_alles;
+                    std::forward_list<std::pair<const r2d2::MapPolarView&,const r2d2::Coordinate &>> untranslated_polarviews_list;
 
                     for(LocatedDistanceSensor * sensor : sensors){
-                            harry_henk_alles.push_front(
+                            untranslated_polarviews_list.push_front(
                                         std::make_pair(
                                             *static_cast<r2d2::MapPolarView*>(sensor->get_data().get_value().release()),
                                             sensor->get_coordinate_attitude().get_coordinate()));
                         }
 
-                    aggregate_polarviews(harry_henk_alles);
-                    //TODO: construct locatedDistance Sensor
-                    return nullptr;
+                    return aggregate_polarviews(untranslated_polarviews_list);
                 }
 
 
             MapPolarView PolarViewAggregator::aggregate_polarviews(
                     const std::forward_list<
                     std::pair<const r2d2::MapPolarView &,
-                    const r2d2::Coordinate &>> & harry){
+                    const r2d2::Coordinate &>> & polarviews_list){
 
 
                     std::forward_list<MapPolarView> translated_polarviews;
-                    for (auto it = harry.begin(); it != harry.end(); ++it ){
+                    for (auto it = polarviews_list.begin(); it != polarviews_list.end(); ++it ){
                             //fill translated_polarviews
-
-                            translated_polarviews.push_front(translate_base_polarview(
-                                                                 it->first,
-                                                                 it->second));
+                            translated_polarviews.push_front(
+                                        translate_base_polarview(
+                                                         it->first,
+                                                         it->second));
                         }
-
-
-                    //merge translated_polarviews
                     return merge_translated_polarviews(translated_polarviews);
-
-
-                    //return PolarView();
                 }
 
 
         MapPolarView PolarViewAggregator::translate_base_polarview(const r2d2::MapPolarView & polarview,
-                                                      const r2d2::Coordinate & sdaf){
-                r2d2::Translation position_of_sensor = sdaf-Coordinate::origin;
+                                                      const r2d2::Coordinate & coordinate_of_sensor){
+                r2d2::Translation translation_of_sensor = coordinate_of_sensor-Coordinate::origin;
 
-            std::map<r2d2::Angle, DistanceReading> bobby = polarview.get_distances();
             MapPolarView translated_polarview;
 
             for (const pair<r2d2::Angle,
-                DistanceReading> & polar_view_iterator : bobby ){
+                DistanceReading> & polar_view_iterator : polarview.get_distances() ){
                     if(polar_view_iterator.second.get_result_type() ==
                      r2d2::DistanceReading::ResultType::CHECKED){
 
                         //calculate Coordinate of translated polarpoint
                         r2d2::Translation PolarPoint =
-                        position_of_sensor +
+                        translation_of_sensor +
                         generate_polar_point(polar_view_iterator);
-
-                        //prints debug info if debug_PolarViewAggregator is
-                        //defined at the top of this file
-                        #ifdef debug_PolarViewAggregator
-                        std::cout <<
-                        "PolarViewAggregator@translate_base_polarview. x: " <<
-                        PolarPoint.get_x()/r2d2::Length::CENTIMETER <<
-                        ", y: " << PolarPoint.get_y()/r2d2::Length::CENTIMETER
-                        << std::endl;
-                        #endif
 
                         //calculate angle of translated polarpoint
                         r2d2::Angle translated_angle(
@@ -90,8 +71,7 @@ namespace r2d2{
 
                         //save translation in translated_polarview. if
                         //duplicates, shortest is dominant.
-
-                        translated_polarview.add_distancereading(translated_angle,translated_distance_reading);
+                        safe_add_polarview(translated_polarview,std::make_pair(translated_angle,translated_distance_reading));
                     }
                 }
             translated_polarview.collapse();
@@ -108,22 +88,23 @@ namespace r2d2{
                         polar_view_pair.first/r2d2::Angle::rad),
                     polar_view_pair.second.get_length()*sin(
                         polar_view_pair.first/r2d2::Angle::rad),
-                    0*r2d2::Length::CENTIMETER);
+                            0*r2d2::Length::CENTIMETER);
             }
 
-        void PolarViewAggregator::safe_add_polarview(
-                                std::map<r2d2::Angle, DistanceReading> & map,
-                                pair<r2d2::Angle, DistanceReading> polar_coord){
-                polar_coord.first = polar_coord.first.normalize();
-                std::pair<std::map<r2d2::Angle, DistanceReading>::iterator,bool>
-                 emplaced_translation = map.emplace(polar_coord);
-                if(!emplaced_translation.second){
-                        if(emplaced_translation.first->second.get_length() >
-                                            polar_coord.second.get_length() ){
-                                map.insert(polar_coord);
-                            }
+        void PolarViewAggregator::safe_add_polarview(MapPolarView &map, pair<Angle, DistanceReading> polar_coord)
+            {
+                if (polar_coord.second.get_result_type() == DistanceReading::ResultType::CHECKED){
+                       DistanceReading old_distance=  map.get_distance(polar_coord.first);
+                       if(old_distance.get_result_type() == DistanceReading::ResultType::CHECKED){
+                               if(polar_coord.second.get_length() < old_distance.get_length()){
+                                       map.add_distancereading(polar_coord.first,polar_coord.second);
+                                   }
+                           } else{
+                               map.add_distancereading(polar_coord.first,polar_coord.second);
+                           }
                     }
             }
+
 
 
         MapPolarView PolarViewAggregator::merge_translated_polarviews(

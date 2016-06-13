@@ -50,14 +50,14 @@
 #define SENSORAGGREGATOR_H
 
 #include <vector>
-#include "../sensorInterfaces/source/include/Sensor.hpp"
+#include "Sensor.hpp"
 
 namespace r2d2{
-    template<typename SENSOR_TYPE>
+    template<typename SENSOR_TYPE, typename SENSOR_DATA_TYPE>
     class SensorAggregator{
     public:
 
-        virtual SENSOR_TYPE * aggregate() = 0;
+        virtual SENSOR_DATA_TYPE aggregate() = 0;
 
         // Adds the sensor to the sensors vector for later use
         // \param Sensor<T> sensor a sensor that has to be added to the vector.
