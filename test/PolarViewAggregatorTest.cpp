@@ -1,36 +1,62 @@
+#include <gtest/gtest.h>
+#include "../source/include/PolarViewAggregator.hpp"
+#include "MapPolarView.hpp"
+#include "Angle.hpp"
+#include "Length.hpp"
+#include "Coordinate.hpp"
+#include <forward_list>
 
-#include "PolarViewAggregator.hpp"
+TEST(PolarViewAggregator, Aggregate_polarviews){
+    r2d2::Coordinate trans1 {2 * r2d2::Length::METER, -2* r2d2::Length::METER, -5* r2d2::Length::METER};
+    r2d2::Coordinate trans2 {4 * r2d2::Length::METER, 2* r2d2::Length::METER, 5* r2d2::Length::METER};
 
-using namespace r2d2;
+    r2d2::MapPolarView testpolar1 = r2d2::MapPolarView();
+    r2d2::MapPolarView testpolar2 = r2d2::MapPolarView();
 
-// constructors:
+    r2d2::Length len1 = 6*r2d2::Length::METER;
+    r2d2::Length len2 = 3*r2d2::Length::METER;
 
+    r2d2::DistanceReading distread1 = r2d2::DistanceReading(len1, r2d2::DistanceReading::ResultType::CHECKED);
+    r2d2::DistanceReading distread2 = r2d2::DistanceReading(len2, r2d2::DistanceReading::ResultType::CHECKED);
 
-//generate_polar_point;
-    //check input domein
-        //positieve hoek <360
-        //negatief hoek input > -360
-        //input negatieve hoek < -360deg (bijboorbeeld 400deg)
-        //input hoek > 360 deg
-        //input hoek groter > 360
-    //genegeer output mogelijkheden en check voor > 0 of < 0
-        // x+ y+
-        // x+ y-
-        // x- y-
-        // x- y+
+    for (int i = 5; i < 350; i+=10){
+        testpolar1.add_distancereading(i*r2d2::Angle::deg, distread1);
+    }
 
-//safe_add_polarview
-    //controleer dan hij de kortste polar pakt bij een duplicaat
-        //voor zowel eerst kort toevoegen als eerst lang invoegen
-    //controleer of hij positieve hoek terug kan geven
-    //contoleren of hij negatieve hoeken terug geeft (mag niet)
+    for (int i = 1; i < 350; i+=10){
+        testpolar2.add_distancereading(i*r2d2::Angle::deg, distread2);
+    }
 
-//merge_translated_polarviews
-    //????
+    std::forward_list<std::pair<const r2d2::MapPolarView&,const r2d2::Coordinate &>> fw_polar_list;
+   fw_polar_list.push_front( std::pair<const r2d2::MapPolarView &,
+                            const r2d2::Coordinate &>(testpolar1,trans1));
+   fw_polar_list.push_front( std::pair<const r2d2::MapPolarView &,
+                            const r2d2::Coordinate &>(testpolar2,trans2));
 
-//translate_base_polarview
-    //???
+   r2d2::MapPolarView aggregated_polarview = r2d2::PolarViewAggregator::aggregate_polarviews(fw_polar_list);
+}
 
-//PolarViewAggregator();
+TEST(PolarViewAggregator, translate_polarview){
+    r2d2::Coordinate trans1 {2 * r2d2::Length::METER, -2* r2d2::Length::METER, -5* r2d2::Length::METER};
 
-//aggregate();
+    r2d2::MapPolarView testpolar1 = r2d2::MapPolarView();
+
+    r2d2::Length len1 = 6*r2d2::Length::METER;
+
+    r2d2::DistanceReading distread1 = r2d2::DistanceReading(len1, r2d2::DistanceReading::ResultType::CHECKED);
+
+    testpolar1.add_distancereading(5*r2d2::Angle::deg, distread1);
+    testpolar1.add_distancereading(15*r2d2::Angle::deg, distread1);
+    testpolar1.add_distancereading(25*r2d2::Angle::deg, distread1);
+    testpolar1.add_distancereading(35*r2d2::Angle::deg, distread1);
+    testpolar1.add_distancereading(45*r2d2::Angle::deg, distread1);
+    testpolar1.add_distancereading(55*r2d2::Angle::deg, distread1);
+    testpolar1.add_distancereading(65*r2d2::Angle::deg, distread1);
+    testpolar1.add_distancereading(75*r2d2::Angle::deg, distread1);
+
+    std::forward_list<std::pair<const r2d2::MapPolarView&,const r2d2::Coordinate &>> fw_polar_list;
+   fw_polar_list.push_front( std::pair<const r2d2::MapPolarView &,
+                            const r2d2::Coordinate &>(testpolar1,trans1));
+
+   r2d2::MapPolarView aggregated_polarview = r2d2::PolarViewAggregator::aggregate_polarviews(fw_polar_list);
+}
