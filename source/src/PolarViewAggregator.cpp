@@ -43,7 +43,7 @@ namespace r2d2{
 
             MapPolarView translated_polarview;
 
-            for (const pair<r2d2::Angle,
+            for (const std::pair<r2d2::Angle,
                 DistanceReading> & polar_view_iterator : polarview.get_distances() ){
                     if(polar_view_iterator.second.get_result_type() ==
                      r2d2::DistanceReading::ResultType::CHECKED){
@@ -79,7 +79,7 @@ namespace r2d2{
 
 
         const r2d2::Translation PolarViewAggregator::generate_polar_point(
-                                            const pair<r2d2::Angle,
+                                            const std::pair<r2d2::Angle,
                                             DistanceReading> & polar_view_pair){
                 return r2d2::Translation(
                     polar_view_pair.second.get_length()*cos(
@@ -89,7 +89,7 @@ namespace r2d2{
                             0*r2d2::Length::CENTIMETER);
             }
 
-        void PolarViewAggregator::safe_add_polarview(MapPolarView &map, pair<Angle, DistanceReading> polar_coord)
+        void PolarViewAggregator::safe_add_polarview(MapPolarView &map, std::pair<Angle, DistanceReading> polar_coord)
             {
                 if (polar_coord.second.get_result_type() == DistanceReading::ResultType::CHECKED){
                        DistanceReading old_distance=  map.get_distance(polar_coord.first);

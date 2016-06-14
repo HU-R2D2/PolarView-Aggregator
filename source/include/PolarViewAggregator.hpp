@@ -70,12 +70,12 @@ namespace r2d2{
     private:
 
         static const r2d2::Translation generate_polar_point(
-            const pair<r2d2::Angle,
+            const std::pair<r2d2::Angle,
             DistanceReading> & polar_view_pair);
 
         static void safe_add_polarview(
             MapPolarView & map,
-            pair<r2d2::Angle, DistanceReading> polar_coord);
+            std::pair<r2d2::Angle, DistanceReading> polar_coord);
 
         //merge vector of polarviews
         static MapPolarView merge_translated_polarviews(const std::forward_list<MapPolarView> &polarview_list);
