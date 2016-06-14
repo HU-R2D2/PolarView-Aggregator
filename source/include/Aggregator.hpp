@@ -8,12 +8,9 @@
 //!
 //! \file   Aggregator.hpp
 //! \author Christiaan van den Berg - 1660475
-//! \date   Created: 06-06-2016
+//! \date   Created: 08-06-2016
 //! \date   Last Modified: 08-06-2016
-//! \brief  Header of SensorAggregator
-//!
-//! This class is used to add sensors to a vector so they can be used to easily
-//! get the data from the sensors.
+//! \brief  Interface for the Aggregator
 //!
 //! \copyright Copyright © 2016, HU University of Applied Sciences Utrecht.
 //! All rights reserved.
@@ -46,27 +43,15 @@
 //! OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 //! EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ~< HEADER_VERSION 2016 04 12 >~
-#ifndef SENSORAGGREGATOR_H
-#define SENSORAGGREGATOR_H
-
-#include <vector>
-#include "Sensor.hpp"
+#ifndef AGGREGATOR_H
+#define AGGREGATOR_H
 
 namespace r2d2{
-    template<typename SENSOR_TYPE, typename SENSOR_DATA_TYPE>
-    class SensorAggregator{
+    template<typename T>
+    class Aggregator{
     public:
-
-        virtual SENSOR_DATA_TYPE aggregate() = 0;
-
-        //! Adds the sensor to the sensors vector for later use
-        //! \param Sensor<T> sensor a sensor that has to be added to the vector.
-        void add_sensor(SENSOR_TYPE * sensor){
-                        sensors.push_back(sensor);
-                    }
-
-    protected:
-        std::vector<SENSOR_TYPE*> sensors;
+        virtual T aggregate() = 0;
     };
 }
+
 #endif
