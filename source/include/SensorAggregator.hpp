@@ -59,8 +59,8 @@ namespace r2d2{
 
         virtual SENSOR_DATA_TYPE aggregate() = 0;
 
-        // Adds the sensor to the sensors vector for later use
-        // \param Sensor<T> sensor a sensor that has to be added to the vector.
+        //! Adds the sensor to the sensors vector for later use
+        //! \param Sensor<T> sensor a sensor that has to be added to the vector.
         void add_sensor(SENSOR_TYPE * sensor){
                         sensors.push_back(sensor);
                     }

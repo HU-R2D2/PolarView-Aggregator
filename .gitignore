@@ -156,4 +156,7 @@ install_manifest.txt
 # ICO
 .ico
 
+# docs
+docs/*
+
  
