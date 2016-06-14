@@ -13,6 +13,7 @@
 #include "PolarView.hpp"
 #include <forward_list>
 #include <MapPolarView.hpp>
+#include "Coordinate.hpp"
 
 namespace r2d2{
     class PolarViewAggregator: public r2d2::SensorAggregator<LocatedDistanceSensor, r2d2::MapPolarView>{

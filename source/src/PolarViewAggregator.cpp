@@ -1,7 +1,5 @@
-#include "PolarViewAggregator.hpp"
+#include "../include/PolarViewAggregator.hpp"
 #include <iostream>
-
-
 
 namespace r2d2{
 
