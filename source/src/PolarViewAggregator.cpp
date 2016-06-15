@@ -73,9 +73,9 @@ namespace r2d2{
 
 
         std::forward_list<MapPolarView> translated_polarviews;
+		//constructs translated_polarviews list out of Sensors
         for (auto it = polarviews_list.begin(); it != polarviews_list.end();
          ++it ){
-            //fill translated_polarviews
             translated_polarviews.push_front(translate_base_polarview(
             it->first,
             it->second));
@@ -87,6 +87,8 @@ namespace r2d2{
     MapPolarView PolarViewAggregator::translate_base_polarview(
     const r2d2::MapPolarView & polarview,
     const r2d2::Coordinate & coordinate_of_sensor){
+		
+		//calculates translation out of coordinate
         r2d2::Translation translation_of_sensor =
         coordinate_of_sensor-Coordinate::origin;
 
@@ -97,31 +99,38 @@ namespace r2d2{
             if(polar_view_iterator.second.get_result_type() ==
             r2d2::DistanceReading::ResultType::CHECKED){
 
-                //calculate Coordinate of translated polarpoint
+                //calculate translated polarpoint(Cartesian coordinate system)
+				// of untranslated polarpoint(Polar coordinate system)
                 r2d2::Translation PolarPoint =
                 translation_of_sensor +
                 generate_polar_point(polar_view_iterator);
 
-                //calculate angle of translated polarpoint
+                //calculate angle of translated polarpoint.
+				//needed to save polarpoint in Polar coordinate system.
+				//use of atan2 needed because atans domain is to
+				// small for an full polarview.
                 r2d2::Angle translated_angle(
                 atan2(PolarPoint.get_y()/Length::CENTIMETER,
                 PolarPoint.get_x()/Length::CENTIMETER)*Angle::rad);
 
                 //calculate distance of translated polarpoint
+				//needed to save polarpoint in Polar coordinate system.
                 r2d2::DistanceReading translated_distance_reading(
                 r2d2::Length(PolarPoint.get_length()),
                 polar_view_iterator.second.get_result_type());
 
-                //make sure angle is a real number, not flotingpoint
+                //make sure angle(deg) is a real number, not flotingpoint
+				//to increase collision chance of angels.
                 translated_angle =  nearbyint(translated_angle/
                 r2d2::Angle::deg)*r2d2::Angle::deg;
 
                 //save translation in translated_polarview. if
-                //duplicates, shortest is dominant.
+                //angle collision, shortest distanceReading is dominant.
                 safe_add_polarview(translated_polarview,std::make_pair(
                 translated_angle,translated_distance_reading));
             }
         }
+		//collepse so polarview does not contain out of range angle collisions.
         translated_polarview.collapse();
         return translated_polarview;
     }
