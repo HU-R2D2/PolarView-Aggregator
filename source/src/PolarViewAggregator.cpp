@@ -67,9 +67,9 @@ namespace r2d2{
 
 
     MapPolarView PolarViewAggregator::aggregate_polarviews(
-    const std::forward_list<
-    std::pair<const r2d2::MapPolarView &,
-    const r2d2::Coordinate &>> & polarviews_list){
+        const std::forward_list<
+        std::pair<const r2d2::MapPolarView &,
+        const r2d2::Coordinate &>> & polarviews_list){
 
 
         std::forward_list<MapPolarView> translated_polarviews;
@@ -77,57 +77,57 @@ namespace r2d2{
         for (auto it = polarviews_list.begin(); it != polarviews_list.end();
          ++it ){
             translated_polarviews.push_front(translate_base_polarview(
-            it->first,
-            it->second));
+                it->first,
+                it->second));
         }
         return merge_translated_polarviews(translated_polarviews);
     }
 
 
     MapPolarView PolarViewAggregator::translate_base_polarview(
-    const r2d2::MapPolarView & polarview,
-    const r2d2::Coordinate & coordinate_of_sensor){
-		
+        const r2d2::MapPolarView & polarview,
+        const r2d2::Coordinate & coordinate_of_sensor){
+
 		//calculates translation out of coordinate
         r2d2::Translation translation_of_sensor =
-        coordinate_of_sensor-Coordinate::origin;
+            coordinate_of_sensor-Coordinate::origin;
 
         MapPolarView translated_polarview;
 
         for (const std::pair<r2d2::Angle,
-        DistanceReading> & polar_view_iterator : polarview.get_distances() ){
+        DistanceReading> & polar_view_iterator : polarview.get_distances()){
             if(polar_view_iterator.second.get_result_type() ==
             r2d2::DistanceReading::ResultType::CHECKED){
 
                 //calculate translated polarpoint(Cartesian coordinate system)
 				// of untranslated polarpoint(Polar coordinate system)
                 r2d2::Translation PolarPoint =
-                translation_of_sensor +
-                generate_polar_point(polar_view_iterator);
+                    translation_of_sensor +
+                        generate_polar_point(polar_view_iterator);
 
                 //calculate angle of translated polarpoint.
 				//needed to save polarpoint in Polar coordinate system.
 				//use of atan2 needed because atans domain is to
 				// small for an full polarview.
                 r2d2::Angle translated_angle(
-                atan2(PolarPoint.get_y()/Length::CENTIMETER,
-                PolarPoint.get_x()/Length::CENTIMETER)*Angle::rad);
+                    atan2(PolarPoint.get_y()/Length::CENTIMETER,
+                        PolarPoint.get_x()/Length::CENTIMETER)*Angle::rad);
 
                 //calculate distance of translated polarpoint
 				//needed to save polarpoint in Polar coordinate system.
                 r2d2::DistanceReading translated_distance_reading(
-                r2d2::Length(PolarPoint.get_length()),
-                polar_view_iterator.second.get_result_type());
+                    r2d2::Length(PolarPoint.get_length()),
+                        polar_view_iterator.second.get_result_type());
 
                 //make sure angle(deg) is a real number, not flotingpoint
 				//to increase collision chance of angels.
                 translated_angle =  nearbyint(translated_angle/
-                r2d2::Angle::deg)*r2d2::Angle::deg;
+                    r2d2::Angle::deg)*r2d2::Angle::deg;
 
                 //save translation in translated_polarview. if
                 //angle collision, shortest distanceReading is dominant.
                 safe_add_polarview(translated_polarview,std::make_pair(
-                translated_angle,translated_distance_reading));
+                    translated_angle,translated_distance_reading));
             }
         }
 		//collepse so polarview does not contain out of range angle collisions.
@@ -159,8 +159,8 @@ namespace r2d2{
             DistanceReading::ResultType::CHECKED){
                 if(polar_coord.second.get_length() < old_distance.get_length()){
                     map.add_distancereading(
-                    polar_coord.first,
-                    polar_coord.second);
+                        polar_coord.first,
+                        polar_coord.second);
                 }
             }
             else{
