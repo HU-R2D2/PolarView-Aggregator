@@ -72,47 +72,47 @@ namespace r2d2{
 
     private:
 
-		//! this method generates an polarpoint(Cartesian coordinate system) 
-		//! from an polarview's distance reading (Polar coordinate system)
-		//! \param polar_view_pair is an polarview's distance.
-		//! \return an polarpoint(Cartesian coordinate system)
+        //! this method generates an polarpoint(Cartesian coordinate system)
+        //! from an polarview's distance reading (Polar coordinate system)
+        //! \param polar_view_pair is an polarview's distance.
+        //! \return an polarpoint(Cartesian coordinate system)
         static const r2d2::Translation generate_polar_point(
             const std::pair<r2d2::Angle,
             DistanceReading> & polar_view_pair);
 
-		//! add an new distance reading to an polarview
-		//! in case of key(angle) collision in polarviews map shortest distance
-		//! reading is dominant.
-		//! \param map is polarviews map
-		//! \param polar_coord an distanceReading that will be added (or not)
+        //! add an new distance reading to an polarview
+        //! in case of key(angle) collision in polarviews map shortest distance
+        //! reading is dominant.
+        //! \param map is polarviews map
+        //! \param polar_coord an distanceReading that will be added (or not)
         static void safe_add_polarview(
             MapPolarView & map,
             std::pair<r2d2::Angle, DistanceReading> polar_coord);
 
         //! merges an list of polarviews to an single MapPolarView.
-		//! (list of polarviews all must share the same base location)
-		//! \param polarview_list list of polarviews that will be merged
-		//! \return a single MapPolarView
+        //! (list of polarviews all must share the same base location)
+        //! \param polarview_list list of polarviews that will be merged
+        //! \return a single MapPolarView
         static MapPolarView merge_translated_polarviews(
-                        const std::forward_list<MapPolarView> &polarview_list);
+            const std::forward_list<MapPolarView> &polarview_list);
 
         //! translates the base location of an polarview.
-		//! see wiki for an explanation supported by visual charts
-		//! \param polarview that will be translated
-		//! \param polarview is the position of the sensor relative to the new 
-		//! base of the polarview.
-		//! \return an translated polarview.
+        //! see wiki for an explanation supported by visual charts
+        //! \param polarview that will be translated
+        //! \param polarview is the position of the sensor relative to the new
+        //! base of the polarview.
+        //! \return an translated polarview.
         static MapPolarView translate_base_polarview(
-                        const r2d2::MapPolarView & polarview,
-                        const r2d2::Coordinate &position_of_sensor);
+            const r2d2::MapPolarView & polarview,
+            const r2d2::Coordinate &position_of_sensor);
 
     public:
         //! this method overwrites the virtual SensorAggregator::aggregate()
-		//! \return An aggregated(merged) MapPolarView of all the sensors in
+        //! \return An aggregated(merged) MapPolarView of all the sensors in
         //! the sensor list.
         MapPolarView aggregate();
 
-		//! constructor
+        //! constructor
         PolarViewAggregator();
 
         //! Merges an polarview forward_list to one polarview
@@ -120,8 +120,8 @@ namespace r2d2{
         //! location that that will be aggregated.
         //! \return A single merged MapPolarView.
         static MapPolarView aggregate_polarviews(
-                const std::forward_list<std::pair<const r2d2::MapPolarView &,
-                const r2d2::Coordinate &> > &polarviews_list);
+            const std::forward_list<std::pair<const r2d2::MapPolarView &,
+            const r2d2::Coordinate &> > &polarviews_list);
         };
 }
 #endif
