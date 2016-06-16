@@ -138,8 +138,8 @@ namespace r2d2{
 
 
     const r2d2::Translation PolarViewAggregator::generate_polar_point(
-    const std::pair<r2d2::Angle,
-    DistanceReading> & polar_view_pair){
+        const std::pair<r2d2::Angle,
+        DistanceReading> & polar_view_pair){
         return r2d2::Translation(
             polar_view_pair.second.get_length()*cos(
             polar_view_pair.first/r2d2::Angle::rad),
@@ -149,8 +149,8 @@ namespace r2d2{
         }
 
     void PolarViewAggregator::safe_add_polarview(
-    MapPolarView &map,
-    std::pair<Angle, DistanceReading> polar_coord){
+        MapPolarView &map,
+        std::pair<Angle, DistanceReading> polar_coord){
 
         if(polar_coord.second.get_result_type() ==
         DistanceReading::ResultType::CHECKED){
@@ -172,8 +172,9 @@ namespace r2d2{
 
 
     MapPolarView PolarViewAggregator::merge_translated_polarviews(
-    const std::forward_list<MapPolarView> &
-    polarview_list){
+        const std::forward_list<MapPolarView> &
+        polarview_list){
+
         MapPolarView merged_polarview;
 
         for(int x = -180; x<180; x++){
